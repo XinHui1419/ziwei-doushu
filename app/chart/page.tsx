@@ -3,8 +3,10 @@ import { useState } from 'react';
 import BirthForm from '@/components/BirthForm';
 import ChartBoard from '@/components/ChartBoard';
 import InsightPanel from '@/components/InsightPanel';
+import OfflineInsight, { type SelectedStar } from '@/components/OfflineInsight';
 import { generateChart } from '@/lib/ziwei/algorithm';
 import type { BirthInfo, ZiweiChart, Palace } from '@/lib/ziwei/types';
+import { IS_MOBILE_APP } from '@/lib/site';
 
 /**
  * 命盘页 —— 开源版「排盘引擎 Demo」
@@ -19,6 +21,9 @@ import type { BirthInfo, ZiweiChart, Palace } from '@/lib/ziwei/types';
 export default function ChartPage() {
   const [chart, setChart] = useState<ZiweiChart | null>(null);
   const [selectedPalace, setSelectedPalace] = useState<Palace | null>(null);
+  // 手机 App 的离线解读面板用：点中的星曜、解读卡是否被关掉
+  const [selectedStar, setSelectedStar] = useState<SelectedStar | null>(null);
+  const [detailClosed, setDetailClosed] = useState(false);
 
   // ── 未起盘：展示出生信息表单 ──
   if (!chart) {
@@ -40,7 +45,7 @@ export default function ChartPage() {
     <main style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 16px' }}>
       <button
         type="button"
-        onClick={() => { setChart(null); setSelectedPalace(null); }}
+        onClick={() => { setChart(null); setSelectedPalace(null); setSelectedStar(null); setDetailClosed(false); }}
         style={{
           marginBottom: 16, padding: '6px 14px', cursor: 'pointer',
           border: '1px solid #ccc', borderRadius: 8, background: 'transparent',
@@ -51,8 +56,23 @@ export default function ChartPage() {
 
       {/* 本命 / 大限 / 流年切换在 ChartBoard 内部；窄屏（手机）上下排，宽屏左右排 */}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,380px)] gap-5 items-start">
-        <ChartBoard chart={chart} onPalaceSelect={setSelectedPalace} />
-        <InsightPanel chart={chart} selectedPalace={selectedPalace} />
+        <ChartBoard
+          chart={chart}
+          onPalaceSelect={p => { setSelectedPalace(p); setSelectedStar(null); setDetailClosed(false); }}
+          onStarSelect={(star, palace) => { setSelectedStar({ star, palaceName: palace.name }); setDetailClosed(false); }}
+        />
+        {/* App 里没有 AI 接口，换成本地数据的离线解读 */}
+        {IS_MOBILE_APP ? (
+          <OfflineInsight
+            chart={chart}
+            selectedPalace={selectedPalace}
+            selectedStar={selectedStar}
+            closed={detailClosed}
+            onClose={() => setDetailClosed(true)}
+          />
+        ) : (
+          <InsightPanel chart={chart} selectedPalace={selectedPalace} />
+        )}
       </div>
     </main>
   );
