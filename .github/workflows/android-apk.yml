@@ -3,9 +3,9 @@ name: Android APK
 # 打包 Android 安装包（调试版，可直接装到手机上）。
 # 跑完后在本次运行页面底部「Artifacts」下载 ziwei-android-apk，解压得到 app-debug.apk。
 # 说明见 docs/mobile-app.md
+# 推送任何分支都会打包（「Run workflow」按钮只对默认分支上的工作流出现，fork 后不一定方便合并到 main）
 on:
   push:
-    branches: [main]
   pull_request:
     paths:
       - 'android/**'

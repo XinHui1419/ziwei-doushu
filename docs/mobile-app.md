@@ -13,7 +13,7 @@
 ## 方式一：GitHub Actions 自动打包 Android APK（最省事）
 
 1. 打开你 fork 的仓库 → **Actions** 页。fork 的仓库默认关闭 Actions，第一次需点 **I understand my workflows, go ahead and enable them**。
-2. 左侧选 **Android APK** → 右侧 **Run workflow**（推送到 `main` 也会自动跑）。
+2. 之后每次推送（任何分支）都会自动打包；也可以在左侧选 **Android APK** → **Run workflow** 手动跑（这个按钮只在工作流已合并到默认分支后出现）。
 3. 大约 5 分钟跑完，进入这次运行页面，底部 **Artifacts** 下载 `ziwei-android-apk`，解压得到 `app-debug.apk`。
 4. 把 APK 发到 Android 手机上打开安装（首次需在系统设置里允许「安装未知来源应用」）。
 
