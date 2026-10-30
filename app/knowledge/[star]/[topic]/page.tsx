@@ -33,7 +33,11 @@ export const dynamicParams = false;
 export async function generateStaticParams() {
   const routes = getAllKnowledgeRoutes();
   // URL 用拼音 slug 替代中文，避开 Vercel/CDN 中文路由边界问题
-  return routes.map(r => ({ star: r.slug, topic: r.topic }));
+  const params = routes.map(r => ({ star: r.slug, topic: r.topic }));
+  // 开源版没有知识库数据（routes 为空），而静态导出（手机 App）要求至少一条；
+  // 给一条占位，渲染时走 notFound()
+  if (params.length === 0 && process.env.MOBILE_BUILD === '1') return [{ star: '_', topic: '_' }];
+  return params;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ star: string; topic: string }> }) {

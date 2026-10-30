@@ -294,6 +294,8 @@ npm test            # 排盘引擎回归（768 盘 × 紫微铁律、夏令时�
 
 > **注意：开源版不含后端 API 路由。**排盘、命盘展示、合盘起盘都在浏览器里用本仓库的引擎完成，**不需要任何 API Key**。AI 解读（`/api/interpret`）和合盘 AI 分析（`/api/heming`）需要你自己实现接口；没实现之前，这两处会直接提示「开源版不含该接口」，配置 API Key 也不会变成可用（#30 就是这个原因）。
 
+> **手机 App**：同一套代码可以打包成 Android / iOS App，排盘在手机本地离线运行。`npm run mobile:build` 静态导出并同步到 `android/`、`ios/`；不想装 Android Studio 的话，GitHub Actions 的「Android APK」工作流会直接产出可安装的 APK。详见 [`docs/mobile-app.md`](./docs/mobile-app.md)。
+
 ---
 
 ## 四、排盘引擎

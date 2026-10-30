@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ZiweiChart } from '@/lib/ziwei/types';
+import { IS_MOBILE_APP } from '@/lib/site';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -41,6 +42,7 @@ export default function ChatPanel({ chart }: ChatPanelProps) {
     setLoading(true);
 
     try {
+      if (IS_MOBILE_APP) throw new Error('api-missing');
       const res = await fetch('/api/interpret', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -6,6 +6,7 @@ import { formToBirthInfo } from '@/lib/ziwei/share';
 import { generateChart as buildChart } from '@/lib/ziwei/algorithm';
 import type { BirthInfo, ZiweiChart } from '@/lib/ziwei/types';
 import { useTheme } from '@/components/ThemeProvider';
+import { IS_MOBILE_APP } from '@/lib/site';
 
 // ─── AiContent 渲染器（与 InsightPanel 一致）────────────────
 function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
@@ -112,6 +113,7 @@ export default function HemingPage() {
       if (!chartA) setChartA(cA);
       if (!chartB) setChartB(cB);
 
+      if (IS_MOBILE_APP) { setApiMissing(true); throw new Error('api-missing'); }
       const res = await fetch('/api/heming', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
